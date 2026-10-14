@@ -104,7 +104,7 @@ function voirDetails(item, type) {
             ajouterTexte(liste, 'li', feature);
         }
         contenu.append(liste);
-        const lien = ajouterTexte(contenu, 'a', 'Visiter le projet (lien de démonstration)');
+        const lien = ajouterTexte(contenu, 'a', ' Visiter ');
         lien.href = item.url;
         lien.target = '_blank';
         lien.rel = 'noopener';
