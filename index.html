@@ -30,41 +30,41 @@
         <section id="projets">
             <h2>Nos projets</h2>
             <div class="filtres">
-                <div><label for="recherche-projets">Recherche</label><input id="recherche-projets" class="form-control" type="search" placeholder="Titre ou client" disabled></div>
-                <div><label for="techno-projets">Technologie</label><select id="techno-projets" class="form-select" disabled><option value="">Toutes les technologies</option></select></div>
-                <div><label for="categorie-projets">Catégorie</label><select id="categorie-projets" class="form-select" disabled><option value="">Toutes les catégories</option></select></div>
+                <div><label for="recherche">Recherche</label><input id="recherche" class="form-control" type="search" placeholder="Titre ou client" disabled></div>
+                <div><label for="techno">Technologie</label><select id="techno" class="form-select" disabled><option value="">Toutes les technologies</option></select></div>
+                <div><label for="categorie">Catégorie</label><select id="categorie" class="form-select" disabled><option value="">Toutes les catégories</option></select></div>
             </div>
-            <div id="loader-projets" class="loader" role="status" aria-label="Chargement des projets"></div>
-            <p id="erreur-projets" class="text-danger" role="alert"></p>
-            <p id="resultats-projets" role="status"></p>
-            <div id="liste-projets" class="grille"></div>
+            <div id="chargement" class="loader" role="status" aria-label="Chargement des projets"></div>
+            <p id="erreur" class="text-danger" role="alert"></p>
+            <p id="total" role="status"></p>
+            <div id="portfolio" class="grille"></div>
         </section>
 
         <section id="formations">
             <h2>Nos formations</h2>
             <div class="filtres">
-                <div><label for="recherche-formations">Recherche</label><input id="recherche-formations" class="form-control" type="search" placeholder="Titre de la formation" disabled></div>
-                <div><label for="categorie-formations">Catégorie</label><select id="categorie-formations" class="form-select" disabled><option value="">Toutes les catégories</option></select></div>
-                <div><label for="niveau-formations">Niveau</label><select id="niveau-formations" class="form-select" disabled><option value="">Tous les niveaux</option></select></div>
-                <div><label for="techno-formations">Technologie</label><select id="techno-formations" class="form-select" disabled><option value="">Toutes les technologies</option></select></div>
+                <div><label for="chercher">Recherche</label><input id="chercher" class="form-control" type="search" placeholder="Titre de la formation" disabled></div>
+                <div><label for="domaine">Catégorie</label><select id="domaine" class="form-select" disabled><option value="">Toutes les catégories</option></select></div>
+                <div><label for="niveau">Niveau</label><select id="niveau" class="form-select" disabled><option value="">Tous les niveaux</option></select></div>
+                <div><label for="technologie">Technologie</label><select id="technologie" class="form-select" disabled><option value="">Toutes les technologies</option></select></div>
             </div>
-            <div id="loader-formations" class="loader" role="status" aria-label="Chargement des formations"></div>
-            <p id="erreur-formations" class="text-danger" role="alert"></p>
-            <p id="resultats-formations" role="status"></p>
-            <div id="liste-formations" class="grille"></div>
+            <div id="attente" class="loader" role="status" aria-label="Chargement des formations"></div>
+            <p id="probleme" class="text-danger" role="alert"></p>
+            <p id="nombre" role="status"></p>
+            <div id="catalogue" class="grille"></div>
         </section>
-        <noscript><p>Activez JavaScript pour charger les projets et les formations.</p></noscript>
+       
     </main>
 
     <!-- only one Bootstrap, remplie selon la carte choisie -->
-    <div class="modal fade" id="details-modal" tabindex="-1" aria-labelledby="titre-modal" aria-hidden="true">
+    <div class="modal fade" id="details" role="dialog" tabindex="-1" aria-labelledby="titre" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title fs-5" id="titre-modal"></h2>
+                    <h2 class="modal-title fs-5" id="titre"></h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
-                <div class="modal-body" id="contenu-modal"></div>
+                <div class="modal-body" id="contenu"></div>
             </div>
         </div>
     </div>

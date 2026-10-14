@@ -24,20 +24,20 @@ function ajouterImage(parent, url) {
 function ajouterBadges(parent, technologies) {
     const badges = document.createElement('div');
     badges.className = 'technologies';
-    technologies.forEach(techno => {
+    for (const techno of technologies) {
         ajouterTexte(badges, 'span', techno, 'badge text-bg-secondary');
-    });
+    }
     parent.append(badges);
 }
 
 function remplirSelect(id, valeurs) {
     const select = document.getElementById(id);
-    valeurs.forEach(valeur => {
+    for (const valeur of valeurs) {
         const option = document.createElement('option');
         option.value = valeur;
         option.textContent = valeur;
         select.append(option);
-    });
+    }
 }
 
 function ajouterInscription(parent, formation) {
@@ -49,7 +49,7 @@ function ajouterInscription(parent, formation) {
     }
 }
 
-// Bootstrap open fenêtre et handle ses trois façons de fermer.
+// Bootstrap gère l'ouverture et la fermeture de la fenêtre.
 function voirDetails(item, type) {
     document.getElementById('titre').textContent = item.title;
     const contenu = document.getElementById('contenu');
@@ -65,7 +65,9 @@ function voirDetails(item, type) {
         ajouterTexte(contenu, 'p', 'Année : ' + item.year);
         ajouterTexte(contenu, 'h3', 'Fonctionnalités');
         const liste = document.createElement('ul');
-        item.features.forEach(feature => ajouterTexte(liste, 'li', feature));
+        for (const feature of item.features) {
+            ajouterTexte(liste, 'li', feature);
+        }
         contenu.append(liste);
         const lien = ajouterTexte(contenu, 'a', 'Visiter le projet (lien de démonstration)');
         lien.href = item.url;
@@ -79,7 +81,9 @@ function voirDetails(item, type) {
         ajouterTexte(contenu, 'p', item.available ? 'Disponible' : 'Complet');
         ajouterTexte(contenu, 'h3', 'Modules');
         const liste = document.createElement('ul');
-        item.modules.forEach(module => ajouterTexte(liste, 'li', module));
+        for (const module of item.modules) {
+            ajouterTexte(liste, 'li', module);
+        }
         contenu.append(liste);
         ajouterInscription(contenu, item);
         if (item.available) contenu.lastElementChild.textContent = 'S’inscrire maintenant';
@@ -93,16 +97,19 @@ function afficherProjets() {
     const recherche = document.getElementById('recherche').value.toLowerCase();
     const techno = document.getElementById('techno').value;
     const categorie = document.getElementById('categorie').value;
-    const resultats = projets.filter(projet => {
-        return (projet.title + ' ' + projet.client).toLowerCase().includes(recherche)
-            && (techno === '' || projet.technologies.includes(techno))
-            && (categorie === '' || projet.category === categorie);
-    });
+    const resultats = [];
+    for (const projet of projets) {
+        const texte = (projet.title + ' ' + projet.client).toLowerCase();
+        if (!texte.includes(recherche)) continue;
+        if (techno !== '' && !projet.technologies.includes(techno)) continue;
+        if (categorie !== '' && projet.category !== categorie) continue;
+        resultats.push(projet);
+    }
 
     const liste = document.getElementById('portfolio');
     liste.replaceChildren();
     document.getElementById('total').textContent = resultats.length + ' projet(s) trouvé(s)';
-    resultats.forEach(projet => {
+    for (const projet of resultats) {
         const carte = document.createElement('article');
         ajouterImage(carte, projet.image);
         ajouterTexte(carte, 'h3', projet.title);
@@ -115,7 +122,7 @@ function afficherProjets() {
         bouton.addEventListener('click', () => voirDetails(projet, 'projet'));
         carte.append(boutons);
         liste.append(carte);
-    });
+    }
 }
 
 function afficherFormations() {
@@ -123,17 +130,19 @@ function afficherFormations() {
     const categorie = document.getElementById('domaine').value;
     const niveau = document.getElementById('niveau').value;
     const techno = document.getElementById('technologie').value;
-    const resultats = formations.filter(formation => {
-        return formation.title.toLowerCase().includes(recherche)
-            && (categorie === '' || formation.category === categorie)
-            && (niveau === '' || formation.level === niveau)
-            && (techno === '' || formation.technologies.includes(techno));
-    });
+    const resultats = [];
+    for (const formation of formations) {
+        if (!formation.title.toLowerCase().includes(recherche)) continue;
+        if (categorie !== '' && formation.category !== categorie) continue;
+        if (niveau !== '' && formation.level !== niveau) continue;
+        if (techno !== '' && !formation.technologies.includes(techno)) continue;
+        resultats.push(formation);
+    }
 
     const liste = document.getElementById('catalogue');
     liste.replaceChildren();
     document.getElementById('nombre').textContent = resultats.length + ' formation(s) trouvée(s)';
-    resultats.forEach(formation => {
+    for (const formation of resultats) {
         const carte = document.createElement('article');
         ajouterImage(carte, formation.image);
         ajouterTexte(carte, 'h3', formation.title);
@@ -151,7 +160,7 @@ function afficherFormations() {
         ajouterInscription(boutons, formation);
         carte.append(boutons);
         liste.append(carte);
-    });
+    }
 }
 
 async function getProjets() {
@@ -163,14 +172,14 @@ async function getProjets() {
         remplirSelect('techno', donnees.technologies);
         remplirSelect('categorie', donnees.categories);
         afficherProjets();
-        document.querySelectorAll('#projets input, #projets select').forEach(filtre => {
+        for (const filtre of document.querySelectorAll('#projets input, #projets select')) {
             filtre.disabled = false;
-        });
+        }
     } catch (erreur) {
-        document.getElementById('erreur-projets').textContent = 'Impossible de charger les projets. Réessayez en actualisant la page.';
+        document.getElementById('erreur').textContent = 'Impossible de charger les projets. Réessayez en actualisant la page.';
     } finally {
-        // Cacher le loader après le chargement, même en cas d'erreur.
-        document.getElementById('loader-projets').hidden = true;
+        // Cacher le loader après le chargement, meme en cas d'erreur.
+        document.getElementById('chargement').hidden = true;
     }
 }
 
@@ -180,238 +189,135 @@ async function getFormations() {
         const reponse = await fetch('https://webcraft-api.vercel.app/data/courses.json');
 
         if (!reponse.ok) {
-            throw new Error('API formations inaccessable');
+            throw new Error('API formations inaccessible');
         }
 
         const donnees = await reponse.json();
-        const liste = document.getElementById('liste-formations');
-
-        donnees.courses.forEach(formation => {
-            const carte = document.createElement('article');
-            carte.className = 'border rounded p-3 mb-3';
-
-            const titre = document.createElement('h3');
-            titre.textContent = formation.title;
-
-            const description = document.createElement('p');
-            description.textContent = formation.description;
-
-            const details = document.createElement('p');
-            details.textContent = formation.level + ' -> ' + formation.duration + ' -> ' + formation.price + ' €';
-
-
-
-            carte.append(titre, description, details);
-            liste.append(carte);
-        });
+        formations = donnees.courses;
+        remplirSelect('domaine', donnees.categories);
+        remplirSelect('niveau', donnees.levels);
+        remplirSelect('technologie', donnees.technologies);
+        afficherFormations();
+        for (const filtre of document.querySelectorAll('#formations input, #formations select')) {
+            filtre.disabled = false;
+        }
     } catch (erreur) {
-        document.getElementById('erreur-formations').textContent = 'Impossible de charger les formations. Réessayez en actualisant la page.';
+        document.getElementById('probleme').textContent = 'Impossible de charger les formations. Réessayez en actualisant la page.';
     } finally {
-        document.getElementById('loader-formations').hidden = true;
+        document.getElementById('attente').hidden = true;
     }
 }
 
-getProjets();
-getFormations();
-
-/*{
-  "courses": [
-    {
-      "id": 1,
-      "title": "Maîtriser React 18",
-      "category": "Frontend",
-      "level": "Intermédiaire",
-      "duration": "24h",
-      "technologies": ["React", "JavaScript", "Hooks"],
-      "instructor": "Sophie Martin",
-      "price": 599,
-      "rating": 4.8,
-      "students": 342,
-      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80",
-      "description": "Formation complète sur React 18 avec les dernières fonctionnalités : Concurrent Rendering, Suspense, Server Components. Apprenez à créer des applications web modernes et performantes.",
-      "modules": ["Composants fonctionnels", "Hooks avancés", "Context API", "Performance", "Server Components"],
-      "available": true
-    },
-    {
-      "id": 2,
-      "title": "Node.js & Express - Backend Complet",
-      "category": "Backend",
-      "level": "Intermédiaire",
-      "duration": "32h",
-      "technologies": ["Node.js", "Express", "MongoDB"],
-      "instructor": "Marc Dubois",
-      "price": 699,
-      "rating": 4.7,
-      "students": 289,
-      "image": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&q=80",
-      "description": "Développez des APIs REST robustes et scalables avec Node.js et Express. Gestion d'authentification, bases de données, déploiement et bonnes pratiques de sécurité.",
-      "modules": ["Installation Node.js", "Routing Express", "MongoDB", "JWT Authentication", "Déploiement"],
-      "available": true
-    },
-    {
-      "id": 3,
-      "title": "Vue.js 3 - De Zéro à Expert",
-      "category": "Frontend",
-      "level": "Débutant",
-      "duration": "20h",
-      "technologies": ["Vue.js", "JavaScript", "Composition API"],
-      "instructor": "Julie Rousseau",
-      "price": 499,
-      "rating": 4.9,
-      "students": 456,
-      "image": "https://images.unsplash.com/photo-1619410283995-43d9134e7656?w=800&q=80",
-      "description": "Débutez avec Vue.js 3 et sa Composition API. Formation pratique avec projets réels : SPA, gestion d'état, routing et communication avec APIs.",
-      "modules": ["Bases Vue.js", "Composition API", "Vue Router", "Pinia Store", "Projet fil rouge"],
-      "available": true
-    },
-    {
-      "id": 4,
-      "title": "DevOps avec Docker & Kubernetes",
-      "category": "DevOps",
-      "level": "Avancé",
-      "duration": "40h",
-      "technologies": ["Docker", "Kubernetes", "CI/CD"],
-      "instructor": "Thomas Bernard",
-      "price": 899,
-      "rating": 4.6,
-      "students": 178,
-      "image": "https://images.unsplash.com/photo-1605745341112-85968b19335b?w=800&q=80",
-      "description": "Maîtrisez les containers Docker et l'orchestration Kubernetes. Déployez des applications scalables avec pipelines CI/CD automatisés sur AWS et Azure.",
-      "modules": ["Docker fondamentaux", "Orchestration K8s", "Helm Charts", "CI/CD GitLab", "Production"],
-      "available": true
-    },
-    {
-      "id": 5,
-      "title": "React Native - Applications Mobiles",
-      "category": "Mobile",
-      "level": "Intermédiaire",
-      "duration": "28h",
-      "technologies": ["React Native", "JavaScript", "Expo"],
-      "instructor": "Léa Fontaine",
-      "price": 649,
-      "rating": 4.7,
-      "students": 312,
-      "image": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80",
-      "description": "Créez des applications mobiles iOS et Android avec React Native. Navigation, animations, intégration APIs, notifications push et publication sur les stores.",
-      "modules": ["Setup Expo", "Components natifs", "Navigation", "State management", "Publication stores"],
-      "available": true
-    },
-    {
-      "id": 6,
-      "title": "Python Django - Web Framework",
-      "category": "Backend",
-      "level": "Débutant",
-      "duration": "30h",
-      "technologies": ["Python", "Django", "PostgreSQL"],
-      "instructor": "Pierre Lefebvre",
-      "price": 549,
-      "rating": 4.5,
-      "students": 267,
-      "image": "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&q=80",
-      "description": "Développez des applications web complètes avec Django. ORM, authentification, admin, REST API avec Django REST Framework, tests et déploiement.",
-      "modules": ["Intro Django", "Models & ORM", "Views & Templates", "Django REST", "Admin & Auth"],
-      "available": false
-    },
-    {
-      "id": 7,
-      "title": "Angular 17 - Enterprise Applications",
-      "category": "Frontend",
-      "level": "Avancé",
-      "duration": "36h",
-      "technologies": ["Angular", "TypeScript", "RxJS"],
-      "instructor": "Alexandre Moreau",
-      "price": 799,
-      "rating": 4.8,
-      "students": 201,
-      "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80",
-      "description": "Maîtrisez Angular 17 pour des applications d'entreprise robustes. TypeScript avancé, RxJS, architecture modulaire, tests unitaires et e2e avec Cypress.",
-      "modules": ["TypeScript avancé", "Components & Directives", "Services & RxJS", "Routing avancé", "Testing"],
-      "available": true
-    },
-    {
-      "id": 8,
-      "title": "Flutter - Développement Mobile Cross-Platform",
-      "category": "Mobile",
-      "level": "Débutant",
-      "duration": "26h",
-      "technologies": ["Flutter", "Dart", "Firebase"],
-      "instructor": "Camille Durand",
-      "price": 599,
-      "rating": 4.9,
-      "students": 389,
-      "image": "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80",
-      "description": "Créez de magnifiques applications mobiles avec Flutter et Dart. Widgets personnalisés, animations, Firebase, state management avec Provider et GetX.",
-      "modules": ["Dart basics", "Flutter widgets", "Navigation", "Firebase integration", "State management"],
-      "available": true
-    },
-    {
-      "id": 9,
-      "title": "AWS Cloud Architect",
-      "category": "DevOps",
-      "level": "Avancé",
-      "duration": "45h",
-      "technologies": ["AWS", "Terraform", "CloudFormation"],
-      "instructor": "Vincent Lambert",
-      "price": 999,
-      "rating": 4.7,
-      "students": 156,
-      "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
-      "description": "Devenez architecte cloud AWS certifié. EC2, S3, Lambda, RDS, VPC, Infrastructure as Code avec Terraform, sécurité, monitoring et optimisation des coûts.",
-      "modules": ["AWS fondamentaux", "Compute & Storage", "Networking", "IaC Terraform", "Sécurité & Coûts"],
-      "available": true
-    },
-    {
-      "id": 10,
-      "title": "Full Stack JavaScript - MERN Stack",
-      "category": "Backend",
-      "level": "Intermédiaire",
-      "duration": "38h",
-      "technologies": ["MongoDB", "Express", "React", "Node.js"],
-      "instructor": "Sarah Petit",
-      "price": 749,
-      "rating": 4.8,
-      "students": 423,
-      "image": "https://images.unsplash.com/photo-1537432376769-00f5c2f4c8d2?w=800&q=80",
-      "description": "Formation complète MERN Stack pour devenir développeur Full Stack JavaScript. Créez une application e-commerce de A à Z avec authentification, paiements et déploiement.",
-      "modules": ["MongoDB Atlas", "Express API", "React frontend", "Authentication JWT", "Stripe integration"],
-      "available": true
+// Initialiser seulement les elements present sur la page d'accueil.
+if (document.getElementById('portfolio')) {
+    document.getElementById('recherche').addEventListener('input', afficherProjets);
+    document.getElementById('chercher').addEventListener('input', afficherFormations);
+    for (const select of document.querySelectorAll('#projets select')) {
+        select.addEventListener('change', afficherProjets);
     }
-  ],
-  "categories": [
-    "Frontend",
-    "Backend",
-    "Mobile",
-    "DevOps"
-  ],
-  "levels": [
-    "Débutant",
-    "Intermédiaire",
-    "Avancé"
-  ],
-  "technologies": [
-    "React",
-    "Vue.js",
-    "Angular",
-    "JavaScript",
-    "TypeScript",
-    "Node.js",
-    "Express",
-    "Python",
-    "Django",
-    "MongoDB",
-    "PostgreSQL",
-    "Docker",
-    "Kubernetes",
-    "AWS",
-    "React Native",
-    "Flutter",
-    "Dart",
-    "Hooks",
-    "RxJS",
-    "Firebase",
-    "Terraform",
-    "CI/CD",
-    "Composition API",
-    "Expo"
-  ]
-}*/
+    for (const select of document.querySelectorAll('#formations select')) {
+        select.addEventListener('change', afficherFormations);
+    }
+    getProjets();
+    getFormations();
+}
+
+// Vérifier les champs du formulaire d'inscription.
+function verifierChamp(id) {
+    const champ = document.getElementById(id);
+    const valeur = champ.value.trim();
+    let message = '';
+
+    if ((id === 'prenom' || id === 'nom') && valeur.length < 2) {
+        message = 'Saisissez au moins 2 caractères.';
+    }
+    if (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valeur)) {
+        message = 'Saisissez un email valide, par exemple nom@mail.fr.';
+    }
+    if (id === 'telephone' && !/^\+[1-9][0-9]{6,14}$/.test(valeur.replace(/[\s().-]/g, ''))) {
+        message = 'Utilisez le format international, par exemple +33 6 12 34 56 78.';
+    }
+    if ((id === 'formation' || id === 'niveau') && valeur === '') {
+        message = 'Choisissez une option.';
+    }
+    if (id === 'motivation' && valeur.length < 50) {
+        message = 'Votre motivation doit contenir au moins 50 caractères.';
+    }
+
+    document.getElementById(id + 'erreur').textContent = message;
+    if (message === '') {
+        champ.classList.remove('is-invalid');
+        champ.classList.add('is-valid');
+        champ.setAttribute('aria-invalid', 'false');
+    } else {
+        champ.classList.remove('is-valid');
+        champ.classList.add('is-invalid');
+        champ.setAttribute('aria-invalid', 'true');
+    }
+    return message === '';
+}
+
+async function chargerChoix() {
+    try {
+        const reponse = await fetch('https://webcraft-api.vercel.app/data/courses.json');
+        if (!reponse.ok) throw new Error('API formations inaccessible');
+        const donnees = await reponse.json();
+        const select = document.getElementById('formation');
+        const choix = new URLSearchParams(window.location.search).get('course');
+        for (const formation of donnees.courses) {
+            const option = document.createElement('option');
+            option.value = formation.id;
+            option.textContent = formation.title;
+            option.disabled = !formation.available;
+            if (!formation.available) option.textContent += ' (Complet)';
+            select.append(option);
+            if (String(formation.id) === choix && formation.available) {
+                select.value = choix;
+            }
+        }
+        select.disabled = false;
+        document.getElementById('envoyer').disabled = false;
+    } catch (erreur) {
+        document.getElementById('probleme').textContent = 'Impossible de charger les formations. Actualisez la page pour réessayer.';
+    } finally {
+        document.getElementById('attente').hidden = true;
+    }
+}
+
+// Le meme fichier JS est utilisé sur les deux pages.
+if (document.getElementById('inscription')) {
+    const formulaire = document.getElementById('inscription');
+    const champs = ['prenom', 'nom', 'email', 'telephone', 'formation', 'niveau', 'motivation'];
+    for (const id of champs) {
+        const champ = document.getElementById(id);
+        champ.addEventListener('input', () => verifierChamp(id));
+        champ.addEventListener('change', () => verifierChamp(id));
+    }
+    formulaire.addEventListener('input', () => {
+        document.getElementById('succes').textContent = '';
+    });
+    formulaire.addEventListener('submit', event => {
+        event.preventDefault();
+        let valide = true;
+        let premier = '';
+        for (const id of champs) {
+            if (!verifierChamp(id)) {
+                valide = false;
+                if (premier === '') premier = id;
+            }
+        }
+        if (!valide) {
+            document.getElementById(premier).focus();
+            return;
+        }
+        document.getElementById('succes').textContent = 'Inscription validée pour la démonstration. Aucune donnée n’a été envoyée.';
+        formulaire.reset();
+        for (const id of champs) {
+            const champ = document.getElementById(id);
+            champ.classList.remove('is-valid', 'is-invalid');
+            champ.removeAttribute('aria-invalid');
+            document.getElementById(id + 'erreur').textContent = '';
+        }
+    });
+    chargerChoix();
+}
