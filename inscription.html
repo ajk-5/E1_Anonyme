@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inscription - WebCraft Solutions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav aria-label="Navigation principale">
+            <a class="logo" href="index.html">WebCraft Solutions</a>
+            <a href="index.html#accueil">Accueil</a>
+            <a href="index.html#projets">Projets</a>
+            <a href="index.html#formations">Formations</a>
+            <a href="inscription.html" aria-current="page">Inscription</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Inscription à une formation</h1>
+        <p>Les champs avec * sont obligatoires.</p>
+        <p>Formulaire de démonstration : aucune donnée n’est envoyée.</p>
+        <div id="attente" class="loader" role="status" aria-label="Chargement des formations"></div>
+        <p id="probleme" class="text-danger" role="alert"></p>
+
+        <form id="inscription" class="bg-white border rounded p-4" novalidate>
+            <div class="mb-3">
+                <label for="prenom">Prénom *</label>
+                <input id="prenom" class="form-control" type="text" autocomplete="given-name" minlength="2" required aria-describedby="prenomerreur">
+                <p id="prenomerreur" class="text-danger" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label for="nom">Nom *</label>
+                <input id="nom" class="form-control" type="text" autocomplete="family-name" minlength="2" required aria-describedby="nomerreur">
+                <p id="nomerreur" class="text-danger" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label for="email">Email *</label>
+                <input id="email" class="form-control" type="email" autocomplete="email" required aria-describedby="emailerreur">
+                <p id="emailerreur" class="text-danger" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label for="telephone">Téléphone *</label>
+                <input id="telephone" class="form-control" type="tel" autocomplete="tel" placeholder="+33612345678" pattern="\+[1-9][0-9]{6,14}" title="Format international, par exemple +33612345678" required aria-describedby="telephoneerreur">
+                <p id="telephoneerreur" class="text-danger" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label for="formation">Formation *</label>
+                <!-- Les options seront ajoutées depuis l'API formations. -->
+                <select id="formation" class="form-select" required disabled aria-describedby="formationerreur">
+                    <option value="">Choisir une formation</option>
+                </select>
+                <p id="formationerreur" class="text-danger" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label for="niveau">Niveau *</label>
+                <select id="niveau" class="form-select" required aria-describedby="niveauerreur">
+                    <option value="">Choisir un niveau</option>
+                    <option>Débutant</option>
+                    <option>Intermédiaire</option>
+                    <option>Avancé</option>
+                </select>
+                <p id="niveauerreur" class="text-danger" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label for="motivation">Motivation * (50 caractères minimum)</label>
+                <textarea id="motivation" class="form-control" rows="4" minlength="50" required aria-describedby="motivationerreur"></textarea>
+                <p id="motivationerreur" class="text-danger" aria-live="polite"></p>
+            </div>
+
+            <div class="mb-3">
+                <label for="entreprise">Entreprise (facultatif)</label>
+                <input id="entreprise" class="form-control" type="text" autocomplete="organization">
+            </div>
+
+            <div class="mb-3">
+                <label for="experience">Expérience en années (facultatif)</label>
+                <input id="experience" class="form-control" type="number" min="0">
+            </div>
+
+            <button id="envoyer" class="btn btn-primary" type="submit" disabled>S’inscrire</button>
+            <p id="succes" class="text-success mt-3" role="status"></p>
+        </form>
+        <noscript><p>Activez JavaScript pour utiliser le formulaire.</p></noscript>
+    </main>
+
+    <footer>
+        <p>© 2026 WebCraft Solutions</p>
+    </footer>
+</body>
+</html>
