@@ -1,4 +1,39 @@
-// Les tableaux permettent de filtrer sans recharger les API.
+/*
+EXAMPLES FOR JSON
+"projects": [
+    {
+      "id": 1,
+      "title": "E-commerce ModaStyle",
+      "client": "ModaStyle Fashion",
+      "category": "E-commerce",
+      "technologies": ["HTML5", "CSS3", "JavaScript", "PHP"],
+      "year": 2024,
+      "duration": "3 mois",
+      "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
+      "description": "Plateforme e-commerce complète pour une boutique de mode en ligne avec système de paiement intégré et gestion de stock.",
+      "features": ["Panier dynamique", "Paiement sécurisé", "Gestion compte client"],
+      "url": "https://modastylee-commerce.example.com"
+    },
+
+
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "Maîtriser React 18",
+      "category": "Frontend",
+      "level": "Intermédiaire",
+      "duration": "24h",
+      "technologies": ["React", "JavaScript", "Hooks"],
+      "instructor": "Sophie Martin",
+      "price": 599,
+      "rating": 4.8,
+      "students": 342,
+      "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80",
+      "description": "Formation complète sur React 18 avec les dernières fonctionnalités : Concurrent Rendering, Suspense, Server Components. Apprenez à créer des applications web modernes et performantes.",
+      "modules": ["Composants fonctionnels", "Hooks avancés", "Context API", "Performance", "Server Components"],
+      "available": true
+    },    */
 let projets = [];
 let formations = [];
 
@@ -30,12 +65,12 @@ function ajouterBadges(parent, technologies) {
     parent.append(badges);
 }
 
-function remplirSelect(id, valeurs) {
+function remplirSelect(id, values) {
     const select = document.getElementById(id);
-    for (const valeur of valeurs) {
+    for (const value of values) {
         const option = document.createElement('option');
-        option.value = valeur;
-        option.textContent = valeur;
+        option.value = value;
+        option.textContent = value;
         select.append(option);
     }
 }
@@ -225,22 +260,22 @@ if (document.getElementById('portfolio')) {
 // Vérifier les champs du formulaire d'inscription.
 function verifierChamp(id) {
     const champ = document.getElementById(id);
-    const valeur = champ.value.trim();
+    const value = champ.value.trim();
     let message = '';
 
-    if ((id === 'prenom' || id === 'nom') && valeur.length < 2) {
+    if ((id === 'prenom' || id === 'nom') && value.length < 2) {
         message = 'Saisissez au moins 2 caractères.';
     }
-    if (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valeur)) {
+    if (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
         message = 'Saisissez un email valide, par exemple nom@mail.fr.';
     }
-    if (id === 'telephone' && !/^\+[1-9][0-9]{6,14}$/.test(valeur.replace(/[\s().-]/g, ''))) {
+    if (id === 'telephone' && !/^\+[1-9][0-9]{6,14}$/.test(value.replace(/[\s().-]/g, ''))) {
         message = 'Utilisez le format international, par exemple +33 6 12 34 56 78.';
     }
-    if ((id === 'formation' || id === 'niveau') && valeur === '') {
+    if ((id === 'formation' || id === 'niveau') && value === '') {
         message = 'Choisissez une option.';
     }
-    if (id === 'motivation' && valeur.length < 50) {
+    if (id === 'motivation' && value.length < 50) {
         message = 'Votre motivation doit contenir au moins 50 caractères.';
     }
 
