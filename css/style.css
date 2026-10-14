@@ -51,7 +51,7 @@ a:focus-visible, button:focus-visible {
 
 /* Contenu */
 main {
-    max-width: 1000px;
+    
     margin: 30px auto;
     padding: 0 20px;
 }
