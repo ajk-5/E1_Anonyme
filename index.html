@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
@@ -53,15 +53,15 @@
             <p id="nombre" role="status"></p>
             <div id="catalogue" class="grille"></div>
         </section>
-        <noscript><p>Activez JavaScript pour charger les projets et les formations.</p></noscript>
+       
     </main>
 
     <!-- only one Bootstrap, remplie selon la carte choisie -->
-    <div class="modal fade" id="details" role="dialog" tabindex="-1" aria-labelledby="titre" aria-hidden="true">
+    <div class="modal fade" id="details" tabindex="-1" aria-labelledby="titre" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title fs-5" id="titre">Détails</h2>
+                    <h2 class="modal-title fs-5" id="titre"></h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body" id="contenu"></div>
